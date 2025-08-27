@@ -1,5 +1,15 @@
 import React from 'react';
-import { ListItem, ListItemText, IconButton, Checkbox, Divider, Typography } from '@mui/material';
+import {
+  ListItem,
+  ListItemText,
+  IconButton,
+  Checkbox,
+  Divider,
+  Typography,
+  Box,
+  Chip,
+} from '@mui/material';
+import { format, isPast, isToday } from 'date-fns';
 import type { Todo } from '../../types/Todo';
 import { useTodo } from '../../hooks/useTodo';
 
@@ -7,6 +17,25 @@ interface TodoItemProps {
   todo: Todo;
   onEditClick: (todo: Todo) => void;
 }
+
+// Add helper function for due date display
+const getDueDateDisplay = (dueDate?: string) => {
+  if (!dueDate) return null;
+
+  const date = new Date(dueDate);
+  const isOverdue = isPast(date) && !isToday(date);
+  const isTodayDue = isToday(date);
+
+  return (
+    <Chip
+      label={format(date, 'PP')}
+      size="small"
+      color={isOverdue ? 'error' : isTodayDue ? 'warning' : 'default'}
+      variant={isOverdue || isTodayDue ? 'filled' : 'outlined'}
+      sx={{ ml: 1 }}
+    />
+  );
+};
 
 export const TodoItem: React.FC<TodoItemProps> = ({ todo, onEditClick }) => {
   const { toggleTodoCompletion, deleteTodo } = useTodo();
@@ -62,15 +91,18 @@ export const TodoItem: React.FC<TodoItemProps> = ({ todo, onEditClick }) => {
             </Typography>
           }
           secondary={
-            <Typography
-              variant="body2"
-              sx={{
-                color: 'text.secondary',
-                textDecoration: todo.completed ? 'line-through' : 'none',
-              }}
-            >
-              {todo.description}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'text.secondary',
+                  textDecoration: todo.completed ? 'line-through' : 'none',
+                }}
+              >
+                {todo.description}
+              </Typography>
+              {getDueDateDisplay(todo.dueDate)}
+            </Box>
           }
         />
       </ListItem>
