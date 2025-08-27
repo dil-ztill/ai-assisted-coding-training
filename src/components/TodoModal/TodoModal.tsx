@@ -71,7 +71,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
     if (!validateForm()) return;
 
-    const dueDateString = dueDate ? dueDate.toISOString() : undefined;
+    const dueDateString = dueDate && !isNaN(dueDate.getTime()) ? dueDate.toISOString() : undefined;
 
     if (mode === 'create') {
       addTodo(title.trim(), description.trim(), dueDateString);

@@ -17,7 +17,7 @@ export const TodoProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const stored = sessionStorage.getItem(STORAGE_KEY);
       if (stored) {
         const parsed = JSON.parse(stored);
-        return parsed.map((todo: Todo & { createdAt: string }) => ({
+        return parsed.map((todo: Todo & { createdAt: string; dueDate?: string }) => ({
           ...todo,
           createdAt: new Date(todo.createdAt),
           // Ensure backward compatibility - existing todos without dueDate remain valid

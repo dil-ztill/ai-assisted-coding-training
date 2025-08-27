@@ -23,6 +23,10 @@ const getDueDateDisplay = (dueDate?: string) => {
   if (!dueDate) return null;
 
   const date = new Date(dueDate);
+  if (!(date instanceof Date) || isNaN(date.getTime())) {
+    // Invalid date, don't render anything
+    return null;
+  }
   const isOverdue = isPast(date) && !isToday(date);
   const isTodayDue = isToday(date);
 
