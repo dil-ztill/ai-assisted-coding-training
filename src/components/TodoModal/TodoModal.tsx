@@ -11,6 +11,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { isValidDate } from '../../utils/dateUtils';
 import { useTodo } from '../../hooks/useTodo';
 // Todo type is used in the context, no need to import it directly here
 
@@ -71,7 +72,7 @@ export const TodoModal: React.FC<TodoModalProps> = ({
 
     if (!validateForm()) return;
 
-    const dueDateString = dueDate && !isNaN(dueDate.getTime()) ? dueDate.toISOString() : undefined;
+    const dueDateString = isValidDate(dueDate) ? dueDate.toISOString() : undefined;
 
     if (mode === 'create') {
       addTodo(title.trim(), description.trim(), dueDateString);

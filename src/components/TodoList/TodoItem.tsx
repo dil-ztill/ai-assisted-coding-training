@@ -10,6 +10,7 @@ import {
   Chip,
 } from '@mui/material';
 import { format, isPast, isToday } from 'date-fns';
+import { isValidDate } from '../../utils/dateUtils';
 import type { Todo } from '../../types/Todo';
 import { useTodo } from '../../hooks/useTodo';
 
@@ -23,7 +24,7 @@ const getDueDateDisplay = (dueDate?: string) => {
   if (!dueDate) return null;
 
   const date = new Date(dueDate);
-  if (!(date instanceof Date) || isNaN(date.getTime())) {
+  if (!isValidDate(date)) {
     // Invalid date, don't render anything
     return null;
   }
